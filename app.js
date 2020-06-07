@@ -9,7 +9,7 @@ mongoose.connect('mongodb+srv://akrapon:panyawattanakit@dbserver-iibnu.gcp.mongo
 // mongoose.connect('mongodb+srv://akrapon:panyawattanakit@dbserver-iibnu.gcp.mongodb.net/dbserver1?retryWrites=true&w=majority')
 
 var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/users');
 var expenseRouter = require('./routes/expense')
 
 var app = express();
@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-// app.use('/api/users', usersRouter);
+app.use('/api/users', usersRouter);
 app.use('/api/expense', expenseRouter);
 
 // catch 404 and forward to error handler

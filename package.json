@@ -2,13 +2,14 @@
   "name": "expense-tracker-api",
   "version": "0.0.0",
   "engines": {
-    "node": "12.16.2"
+    "node": "12.x"
   },
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
