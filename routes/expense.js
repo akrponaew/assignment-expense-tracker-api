@@ -14,11 +14,13 @@ router.get('/:username', async function (req, res, next) {
 
 router.post('/', async function (req, res, next) {
     const Expense = new Expense({
-        empno: req.body.empno,
-        empname: req.body.empname,
-        emplastname: req.body.emplastname,
+        description: req.body.description,
+        amount: req.body.amount,
+        month: req.body.month,
+        year: req.body.year,
+        expensedate: req.body.expensedate,
         createdate: new Date(),
-        createby: 'sa'
+        createby: req.body.name
     })
 
     await Expense.save()
