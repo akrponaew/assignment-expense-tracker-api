@@ -3,7 +3,7 @@ const router = express.Router();
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Akrapon Panyawattanakit fix heroku' });
+  res.render('index', { title: 'Akrapon Panyawattanakit fix heroku again!!' });
 });
 
 module.exports = router;
