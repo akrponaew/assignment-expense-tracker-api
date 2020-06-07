@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const UsersModel = require('../models/UsersModel')
+const UsersModel = require('../models/users')
 const bcrypt = require('bcrypt')
 const jwt = require('../jwt')
 
@@ -46,7 +46,7 @@ router.post('/', async function (req, res, next) {
 
     if (req.body.username) createby = req.body.username
 
-    const Users = new UsersModel({
+    const user = new UsersModel({
       username: req.body.username,
       password: req.body.password,
       name: req.body.name,
@@ -58,31 +58,31 @@ router.post('/', async function (req, res, next) {
 
     const salt = await bcrypt.genSalt(10)
 
-    Users.password = await bcrypt.hash(Users.password, salt)
+    user.password = await bcrypt.hash(user.password, salt)
 
-    await Users.save()
-    res.status(201).send(Users)
+    await user.save()
+    res.status(201).send(user)
   }
 });
 
 //update or change password
 // router.put('/:username', async function (req, res, next) {
 //   try {
-//     const Users = await UsersModel.findOne({ username: req.params.username })
+//     const user = await UsersModel.findOne({ username: req.params.username })
 
 //     if (req.body.password) {
-//       Users.password = req.body.password
+//       user.password = req.body.password
 
 //       const salt = await bcrypt.genSalt(10)
-//       Users.password = await bcrypt.hash(Users.password, salt)
+//       user.password = await bcrypt.hash(user.password, salt)
 //     }
 
-//     Users.updatedate = new Date()
+//     user.updatedate = new Date()
 
-//     Users.updateby = req.params.username
+//     user.updateby = req.params.username
 
-//     Users.save()
-//     res.send(Users)
+//     user.save()
+//     res.send(user)
 //   } catch (ex) {
 //     res.status(404)
 //     res.send({ error: `Update incompleted.` });

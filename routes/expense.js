@@ -1,16 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const Expense = require('../models/expense')
+const ExpenseModel = require('../models/expense')
 const jwt = require('../jwt')
 
 //shouldn't get all expense
 // router.get('/', async function (req, res, next) {
-//     const result = await Expense.find({});
+//     const result = await ExpenseModel.find({});
 //     res.send(result);
 // });
 
 router.get('/:username', jwt.isAuthenticated, async function (req, res, next) {
-    const result = await Expense.findOne({ createby: req.params.username })
+    const result = await ExpenseModel.findOne({ createby: req.params.username })
     res.send(result)
 });
 
@@ -19,7 +19,7 @@ router.post('/', jwt.isAuthenticated, async function (req, res, next) {
     let createby = 'unknow'
     if (req.body.username) createby = req.body.username
 
-    const expense = new Expense({
+    const expense = new ExpenseModel({
         description: req.body.description,
         amount: req.body.amount,
         month: req.body.month,
@@ -35,7 +35,7 @@ router.post('/', jwt.isAuthenticated, async function (req, res, next) {
 
 router.put('/:id', jwt.isAuthenticated, async function (req, res, next) {
     try {
-        const expense = await Expense.findOne({ _id: req.params.id })
+        const expense = await ExpenseModel.findOne({ _id: req.params.id })
 
         if (req.body.description) expense.description = req.body.description
 
@@ -58,7 +58,7 @@ router.put('/:id', jwt.isAuthenticated, async function (req, res, next) {
 
 router.delete('/:id', jwt.isAuthenticated, async function (req, res, next) {
     try {
-        await Expense.deleteOne({ _id: req.params.id })
+        await ExpenseModel.deleteOne({ _id: req.params.id })
         res.status(204).send()
     } catch (ex) {
         res.status(404)
