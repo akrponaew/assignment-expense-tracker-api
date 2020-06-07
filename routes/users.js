@@ -12,7 +12,7 @@ var Users = require('../models/users')
 // });
 
 router.get('/', function (req, res, next) {
-  res.render('users', { title: 'aiew' });
+  res.render('users', { title: 'aiewer' });
 });
 
 router.post('/', async function (req, res, next) {
