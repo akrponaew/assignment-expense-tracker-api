@@ -2,56 +2,53 @@ var express = require('express')
 var router = express.Router()
 var Users = require('../models/users')
 
-router.get('/', async function (req, res, next) {
-  var result = await Users.find();
-  res.json(result);
-});
+router.get('/:username/:password', async function (req, res, next) {
+  var result = await Users.findOne({
+    username: req.params.username,
+    password: req.params.password
+  })
 
-router.get('/:empno', async function (req, res, next) {
-  var result = await Users.findOne({ empno: req.params.empno })
   res.send(result)
 });
 
 router.post('/', async function (req, res, next) {
-  const Users = new Users({
-    empno: req.body.empno,
-    empname: req.body.empname,
-    emplastname: req.body.emplastname,
-    createdate: new Date(),
-    createby: 'sa'
-  })
+  const isExists = await Users.findOne({ username: req.params.username })
 
-  await Users.save()
-  res.send(Users)
+  if (isExists) {
+    res.status(404)
+    res.send({ error: `Username already exists` });
+  }
+  else {
+    const User = new Users({
+      username: req.body.username,
+      password: req.body.password,
+      name: req.body.name,
+      lastname: req.body.lastname,
+      status: 'A',
+      createdate: new Date(),
+      createby: req.body.username
+    })
+
+    await User.save()
+    res.send(User)
+  }
 });
 
-router.put('/:empno', async function (req, res, next) {
+router.put('/:username', async function (req, res, next) {
   try {
-    var Users = await Users.findOne({ empno: req.params.empno })
+    var Users = await Users.findOne({ username: req.params.username })
 
-    if (req.body.empname) Users.empname = req.body.empname
-
-    if (req.body.emplastname) Users.emplastname = req.body.emplastname
+    if (req.body.password) Users.password = req.body.password
 
     Users.updatedate = new Date()
 
-    Users.updateby = 'sa'
+    Users.updateby = req.params.username
 
     Users.save()
     res.send(Users)
   } catch (ex) {
     res.status(404)
     res.send({ error: `Update incompleted.` });
-  }
-});
-
-router.delete('/:empno', async function (req, res, next) {
-  try {
-    await Users.deleteOne({ empno: req.params.empno })
-    res.status(204).send()
-  } catch (ex) {
-    res.status(404)
-    res.send({ error: `Delete incompleted.` })
   }
 });
 

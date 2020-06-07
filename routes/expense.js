@@ -7,8 +7,8 @@ router.get('/', async function (req, res, next) {
     res.json(result);
 });
 
-router.get('/:empno', async function (req, res, next) {
-    var result = await Expense.findOne({ empno: req.params.empno })
+router.get('/:username', async function (req, res, next) {
+    var result = await Expense.findOne({ createby: req.params.username })
     res.send(result)
 });
 

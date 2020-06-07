@@ -5,7 +5,12 @@ const expenseSchema = new Schema({
     description: String,
     amount: Number,
     month: String,
-    year: Number
+    year: Number,
+    expensedate: Date,
+    createdate: Date,
+    createby: String,
+    updatedate: Date,
+    updateby: String
 })
 
 const ExpenseModel = mongoose.model('expense', expenseSchema)
