@@ -1,18 +1,41 @@
-var express = require('express')
-var router = express.Router()
-var Users = require('../models/users')
+const express = require('express')
+const router = express.Router()
+const UsersModel = require('../models/UsersModel')
+const bcrypt = require('bcrypt')
+const jwt = require('../jwt')
 
+//signin
 router.get('/:username/:password', async function (req, res, next) {
-  const result = await Users.findOne({
-    username: req.params.username,
-    password: req.params.password
+  const result = await UsersModel.findOne({
+    username: req.params.username
   })
 
-  res.send(result)
+  if (result) {
+    const isUser = await bcrypt.compare(req.params.password, result.password)
+
+
+    //if username and password correct
+    if (isUser) {
+      //create token for user
+      const claims = {
+        username: result.username,
+        name: result.name,
+        lastname: result.lastname
+      }
+
+      const token = jwt.encoded(claims)
+
+      res.send(token)
+    }
+    else res.send(isUser)
+
+  }
+  else res.status(404).send('user not found')
 });
 
+//signup
 router.post('/', async function (req, res, next) {
-  const isExists = await Users.findOne({ username: req.params.username })
+  const isExists = await UsersModel.findOne({ username: req.params.username })
 
   if (isExists) {
     res.status(404)
@@ -23,7 +46,7 @@ router.post('/', async function (req, res, next) {
 
     if (req.body.username) createby = req.body.username
 
-    const user = new Users({
+    const Users = new UsersModel({
       username: req.body.username,
       password: req.body.password,
       name: req.body.name,
@@ -33,27 +56,37 @@ router.post('/', async function (req, res, next) {
       createby: createby
     })
 
-    await user.save()
-    res.send(user)
+    const salt = await bcrypt.genSalt(10)
+
+    Users.password = await bcrypt.hash(Users.password, salt)
+
+    await Users.save()
+    res.status(201).send(Users)
   }
 });
 
-router.put('/:username', async function (req, res, next) {
-  try {
-    const users = await Users.findOne({ username: req.params.username })
+//update or change password
+// router.put('/:username', async function (req, res, next) {
+//   try {
+//     const Users = await UsersModel.findOne({ username: req.params.username })
 
-    if (req.body.password) users.password = req.body.password
+//     if (req.body.password) {
+//       Users.password = req.body.password
 
-    users.updatedate = new Date()
+//       const salt = await bcrypt.genSalt(10)
+//       Users.password = await bcrypt.hash(Users.password, salt)
+//     }
 
-    users.updateby = req.params.username
+//     Users.updatedate = new Date()
 
-    users.save()
-    res.send(users)
-  } catch (ex) {
-    res.status(404)
-    res.send({ error: `Update incompleted.` });
-  }
-});
+//     Users.updateby = req.params.username
+
+//     Users.save()
+//     res.send(Users)
+//   } catch (ex) {
+//     res.status(404)
+//     res.send({ error: `Update incompleted.` });
+//   }
+// });
 
 module.exports = router;
