@@ -13,7 +13,7 @@ router.get('/:username', async function (req, res, next) {
 });
 
 router.post('/', async function (req, res, next) {
-    const Expense = new Expense({
+    const expense = new Expense({
         description: req.body.description,
         amount: req.body.amount,
         month: req.body.month,
@@ -23,8 +23,8 @@ router.post('/', async function (req, res, next) {
         createby: req.body.name
     })
 
-    await Expense.save()
-    res.send(Expense)
+    await expense.save()
+    res.send(expense)
 });
 
 router.put('/:empno', async function (req, res, next) {

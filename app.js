@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://akrapon:panyawattanakit@dbserver-iibnu.gcp.mongodb.net/dbserver1')
+mongoose.connect('mongodb://akrapon:panyawattanakit@dbserver-iibnu.gcp.mongodb.net/dbserver1')
 // mongoose.connect('mongodb+srv://akrapon:panyawattanakit@dbserver-iibnu.gcp.mongodb.net/dbserver1?retryWrites=true&w=majority')
 
 var indexRouter = require('./routes/index');
