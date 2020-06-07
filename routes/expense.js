@@ -3,16 +3,20 @@ var router = express.Router()
 var Expense = require('../models/expense')
 
 router.get('/', async function (req, res, next) {
-    var result = await Expense.find({});
-    res.json(result);
+    const result = await Expense.find({});
+    res.send(result);
 });
 
 router.get('/:username', async function (req, res, next) {
-    var result = await Expense.findOne({ createby: req.params.username })
+    const result = await Expense.findOne({ createby: req.params.username })
     res.send(result)
 });
 
 router.post('/', async function (req, res, next) {
+
+    let createby = 'unknow'
+    if (req.body.username) createby = req.body.username
+
     const expense = new Expense({
         description: req.body.description,
         amount: req.body.amount,
@@ -20,36 +24,39 @@ router.post('/', async function (req, res, next) {
         year: req.body.year,
         expensedate: req.body.expensedate,
         createdate: new Date(),
-        createby: req.body.name
+        createby: createby
     })
 
     await expense.save()
     res.send(expense)
 });
 
-router.put('/:empno', async function (req, res, next) {
+router.put('/:id', async function (req, res, next) {
     try {
-        var Expense = await Expense.findOne({ empno: req.params.empno })
+        const expense = await Expense.findOne({ _id: req.params.id })
 
-        if (req.body.empname) Expense.empname = req.body.empname
+        if (req.body.description) expense.description = req.body.description
 
-        if (req.body.emplastname) Expense.emplastname = req.body.emplastname
+        if (req.body.amount) expense.amount = req.body.amount
 
-        Expense.updatedate = new Date()
+        if (req.body.expensedate) expense.expensedate = req.body.expensedate
 
-        Expense.updateby = 'sa'
+        expense.updatedate = new Date()
 
-        Expense.save()
-        res.send(Expense)
+        if (req.body.username) expense.updateby = req.body.username
+        else expense.updateby = 'unknow'
+
+        expense.save()
+        res.send(expense)
     } catch (ex) {
         res.status(404)
         res.send({ error: `Update incompleted.` });
     }
 });
 
-router.delete('/:empno', async function (req, res, next) {
+router.delete('/:id', async function (req, res, next) {
     try {
-        await Expense.deleteOne({ empno: req.params.empno })
+        await Expense.deleteOne({ _id: req.params.id })
         res.status(204).send()
     } catch (ex) {
         res.status(404)

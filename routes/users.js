@@ -3,7 +3,7 @@ var router = express.Router()
 var Users = require('../models/users')
 
 router.get('/:username/:password', async function (req, res, next) {
-  var result = await Users.findOne({
+  const result = await Users.findOne({
     username: req.params.username,
     password: req.params.password
   })
@@ -19,33 +19,37 @@ router.post('/', async function (req, res, next) {
     res.send({ error: `Username already exists` });
   }
   else {
-    const User = new Users({
+    let createby = 'unknow'
+
+    if (req.body.username) createby = req.body.username
+
+    const user = new Users({
       username: req.body.username,
       password: req.body.password,
       name: req.body.name,
       lastname: req.body.lastname,
       status: 'A',
       createdate: new Date(),
-      createby: req.body.username
+      createby: createby
     })
 
-    await User.save()
-    res.send(User)
+    await user.save()
+    res.send(user)
   }
 });
 
 router.put('/:username', async function (req, res, next) {
   try {
-    var Users = await Users.findOne({ username: req.params.username })
+    const users = await Users.findOne({ username: req.params.username })
 
-    if (req.body.password) Users.password = req.body.password
+    if (req.body.password) users.password = req.body.password
 
-    Users.updatedate = new Date()
+    users.updatedate = new Date()
 
-    Users.updateby = req.params.username
+    users.updateby = req.params.username
 
-    Users.save()
-    res.send(Users)
+    users.save()
+    res.send(users)
   } catch (ex) {
     res.status(404)
     res.send({ error: `Update incompleted.` });
