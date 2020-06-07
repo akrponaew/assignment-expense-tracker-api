@@ -3,7 +3,7 @@ var router = express.Router()
 var Expense = require('../models/expense')
 
 router.get('/', async function (req, res, next) {
-    var result = await Expense.find();
+    var result = await Expense.find({});
     res.json(result);
 });
 

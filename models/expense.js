@@ -13,6 +13,6 @@ const expenseSchema = new Schema({
     updateby: String
 })
 
-const ExpenseModel = mongoose.model('expense', expenseSchema)
+const ExpenseModel = mongoose.model('expense', expenseSchema, 'expense')
 
 module.exports = ExpenseModel
