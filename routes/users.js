@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const UsersModel = require('../models/users')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const jwt = require('../jwt')
 
 //signin
@@ -12,7 +12,6 @@ router.get('/:username/:password', async function (req, res, next) {
 
   if (result) {
     const isUser = await bcrypt.compare(req.params.password, result.password)
-
 
     //if username and password correct
     if (isUser) {
