@@ -42,10 +42,6 @@ router.post('/', async function (req, res, next) {
     res.send({ error: `Username already exists` });
   }
   else {
-    let createby = 'unknow'
-
-    if (req.body.username) createby = req.body.username
-
     const user = new UsersModel({
       username: req.body.username,
       password: req.body.password,
@@ -53,7 +49,7 @@ router.post('/', async function (req, res, next) {
       lastname: req.body.lastname,
       status: 'A',
       createdate: new Date(),
-      createby: createby
+      createby: req.body.username
     })
 
     const salt = await bcrypt.genSalt(10)
