@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const UsersModel = require('../models/users')
-const bcrypt = require('bcryptjs')
+const bcryptjs = require('bcryptjs')
 const jwt = require('../jwt')
 
 //signin
@@ -11,7 +11,7 @@ router.get('/:username/:password', async function (req, res, next) {
   })
 
   if (result) {
-    const isUser = await bcrypt.compare(req.params.password, result.password)
+    const isUser = await bcryptjs.compare(req.params.password, result.password)
 
     //if username and password correct
     if (isUser) {
@@ -34,7 +34,7 @@ router.get('/:username/:password', async function (req, res, next) {
 
 //signup
 router.post('/', async function (req, res, next) {
-  const isExists = await UsersModel.findOne({ username: req.params.username })
+  const isExists = await UsersModel.findOne({ username: req.body.username })
 
   if (isExists) {
     res.status(404)
@@ -51,9 +51,9 @@ router.post('/', async function (req, res, next) {
       createby: req.body.username
     })
 
-    const salt = await bcrypt.genSalt(10)
+    const salt = await bcryptjs.genSalt(10)
 
-    user.password = await bcrypt.hash(user.password, salt)
+    user.password = await bcryptjs.hash(user.password, salt)
 
     await user.save()
     res.status(201).send(user)
@@ -68,8 +68,8 @@ router.post('/', async function (req, res, next) {
 //     if (req.body.password) {
 //       user.password = req.body.password
 
-//       const salt = await bcrypt.genSalt(10)
-//       user.password = await bcrypt.hash(user.password, salt)
+//       const salt = await bcryptjs.genSalt(10)
+//       user.password = await bcryptjs.hash(user.password, salt)
 //     }
 
 //     user.updatedate = new Date()
