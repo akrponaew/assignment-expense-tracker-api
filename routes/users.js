@@ -2,17 +2,13 @@ var express = require('express')
 var router = express.Router()
 var Users = require('../models/users')
 
-// router.get('/:username/:password', async function (req, res, next) {
-//   var result = await Users.findOne({
-//     username: req.params.username,
-//     password: req.params.password
-//   })
+router.get('/:username/:password', async function (req, res, next) {
+  var result = await Users.findOne({
+    username: req.params.username,
+    password: req.params.password
+  })
 
-//   res.send(result)
-// });
-
-router.get('/', function (req, res, next) {
-  res.render('users', { title: 'aiewer' });
+  res.send(result)
 });
 
 router.post('/', async function (req, res, next) {

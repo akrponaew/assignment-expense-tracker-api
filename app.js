@@ -3,9 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://akrapon:panyawattanakit@dbserver-iibnu.gcp.mongodb.net/dbserver1')
+// mongoose.connect('mongodb+srv://akrapon:panyawattanakit@dbserver-iibnu.gcp.mongodb.net/dbserver1')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
