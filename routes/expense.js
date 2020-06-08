@@ -22,6 +22,7 @@ router.post('/', jwt.isAuthenticated, async function (req, res, next) {
     const expense = new ExpenseModel({
         description: req.body.description,
         amount: req.body.amount,
+        categories: req.body.categories,
         month: req.body.month,
         year: req.body.year,
         expensedate: req.body.expensedate,
@@ -40,6 +41,12 @@ router.put('/:id', jwt.isAuthenticated, async function (req, res, next) {
         if (req.body.description) expense.description = req.body.description
 
         if (req.body.amount) expense.amount = req.body.amount
+
+        if (req.body.categories) expense.categories = req.body.categories
+
+        if (req.body.month) expense.month = req.body.month
+
+        if (req.body.year) expense.year = req.body.year
 
         if (req.body.expensedate) expense.expensedate = req.body.expensedate
 
