@@ -10,7 +10,7 @@ const jwt = require('../jwt')
 // });
 
 router.get('/:username', jwt.isAuthenticated, async function (req, res, next) {
-    const result = await ExpenseModel.findOne({ createby: req.params.username })
+    const result = await ExpenseModel.find({ createby: req.params.username })
     res.send(result)
 });
 
